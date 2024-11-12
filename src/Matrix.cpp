@@ -109,14 +109,14 @@ namespace matrix
                         *(M.data_ + sz_ * p + i) += non_nil_line[i];
                 }
                 double& a_p = non_nil_line[p];
-                std::cerr << __LINE__ << ": non_nil_line =";
-                for (size_t i = 0; i < sz_; i++)
-                    std::cerr << ' ' << non_nil_line[i];
-                std::cerr << std::endl;
+                // std::cerr << __LINE__ << ": non_nil_line =";
+                // for (size_t i = 0; i < sz_; i++)
+                //     std::cerr << ' ' << non_nil_line[i];
+                // std::cerr << std::endl;
                 for (size_t q = p + 1; q < sz_; q++)
                 {
                     double b_p = *(M.data_ + sz_ * q + p);
-                    std::cerr << __LINE__ << ": b_p = " << b_p << std::endl;
+                    // std::cerr << __LINE__ << ": b_p = " << b_p << std::endl;
                     if ((-Eps > b_p) || (b_p > Eps))
                     {
                         for (size_t i = p; i < sz_; i++)
@@ -124,13 +124,7 @@ namespace matrix
                     }
                 }
             }
-            std::cerr << "p = " << p << std::endl;
-            for (size_t i = 0; i < M.sz_; i++)
-            {
-                for (size_t j = 0; j < M.sz_; j++)
-                    std::cerr << *(M.data_+ M.sz_ * i + j) << ' ';
-                std::cerr << std::endl;
-            }
+            // std::cerr << "p = " << p << std::endl;
         }
         return M;
     }
@@ -138,11 +132,11 @@ namespace matrix
     template<> double Matrix<double>::det() const
     {
         double answer = 1;
-        std::cerr << "I go to to_triangle\n";
+        // std::cerr << "I go to to_triangle\n";
         Matrix<double> M = to_triangle();
-        std::cerr << "I have finished to_triangle\n";
-        std::cerr << "I have matrix\n";
-        std::cerr << M;
+        // std::cerr << "I have finished to_triangle\n";
+        // std::cerr << "I have matrix\n";
+        // std::cerr << M;
         for (size_t i = 0; i < sz_; i++)
             if ((-Eps < (answer *= *(M.data_ + (sz_ + 1)* i)))
             && ((answer * *(M.data_ + (sz_ + 1)* i)) < Eps))
