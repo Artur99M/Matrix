@@ -3,6 +3,8 @@
 # cmake --build build
 # for tests:
 # cmake --build ./build --target test
+# or
+# cd build && CTest && cd ..
 
 
 cmake_minimum_required (VERSION 3.15)
@@ -17,14 +19,13 @@ add_executable (${EXEC_FILE})
 # target_link_libraries (${EXEC_FILE} ${Matrix})
 target_include_directories (${EXEC_FILE} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_sources (${EXEC_FILE} PRIVATE ${SRCS})
-target_compile_features (${EXEC_FILE} PUBLIC cxx_std_14)
+target_compile_features (${EXEC_FILE} PUBLIC cxx_std_20)
 
 include (Ctest)
 enable_testing()
-file (GLOB testfiles ${CMAKE_SOURCE_DIR}/test/*.dat)
-foreach (file ${testfiles})
+file(GLOB testfiles "${CMAKE_SOURCE_DIR}/test/*.dat")
+foreach(file ${testfiles})
     add_test (NAME ${file}
-    COMMAND bash ${CMAKE_SOURCE_DIR}/test/test.sh file ${EXEC_FILE} ${CMAKE_SOURCE_DIR}
-    )
-    set_tests_properties (${file} PROPERTIES DEPENDS ${EXEC_FILE})
+        COMMAND bash ${CMAKE_SOURCE_DIR}/test/test.sh ${CMAKE_SOURCE_DIR} ${file})
+    set_tests_properties(${file} PROPERTIES DEPENDS ${EXEC_FILE})
 endforeach()

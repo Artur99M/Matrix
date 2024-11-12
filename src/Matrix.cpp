@@ -4,11 +4,11 @@
 #include <iostream>
 #include <utility>
 
+
 namespace matrix
 {
 
-    template <class T>
-    std::ostream& operator<<(std::ostream& os, Matrix<T> M)
+    std::ostream& operator<<(std::ostream& os, Matrix<double> M)
     {
         for (size_t i = 0; i < M.sz_; i++)
         {
@@ -78,7 +78,7 @@ namespace matrix
     template<> Matrix<double> Matrix<double>::to_triangle() const
     {
         Matrix<double> M = *this;
-        for (size_t p = 0; p < sz_; p++)
+        for (size_t p = 0; p < sz_ - 1; p++)
         {
             double* non_nil_line = nullptr;
             for (size_t l = p; l < sz_; l++)
@@ -108,28 +108,29 @@ namespace matrix
                     for (size_t i = 0; i < sz_; i++)
                         *(M.data_ + sz_ * p + i) += non_nil_line[i];
                 }
-                double& a_p = non_nil_line[0];
+                double& a_p = non_nil_line[p];
+                std::cerr << __LINE__ << ": non_nil_line =";
+                for (size_t i = 0; i < sz_; i++)
+                    std::cerr << ' ' << non_nil_line[i];
+                std::cerr << std::endl;
                 for (size_t q = p + 1; q < sz_; q++)
                 {
-                    std::cerr << "101: non_nil_line =";
-                    for (size_t i = 0; i < sz_; i++)
-                        std::cerr << ' ' << non_nil_line[i];
-                    std::cerr << std::endl;
-                    double b_p = *(M.data_ + sz_ * q);
-                    std::cerr << "106: b_p = " << b_p << std::endl;
+                    double b_p = *(M.data_ + sz_ * q + p);
+                    std::cerr << __LINE__ << ": b_p = " << b_p << std::endl;
                     if ((-Eps > b_p) || (b_p > Eps))
-                        for (size_t i = 0; i < sz_; i++)
-                            *(M.data_ + sz_ * q + i) -= non_nil_line[i] * b_p / a_p;
-                    std::cerr << "110:\n";
+                    {
+                        for (size_t i = p; i < sz_; i++)
+                          *(M.data_ + q * sz_ + i) -= (non_nil_line[i] * b_p / a_p);
+                    }
                 }
             }
-        }
-        std::cerr << "final of to_triangle" << std::endl;
-        for (size_t i = 0; i < M.sz_; i++)
-        {
-            for (size_t j = 0; j < M.sz_; j++)
-                std::cerr << *(M.data_+ M.sz_ * i + j) << ' ';
-            std::cerr << std::endl;
+            std::cerr << "p = " << p << std::endl;
+            for (size_t i = 0; i < M.sz_; i++)
+            {
+                for (size_t j = 0; j < M.sz_; j++)
+                    std::cerr << *(M.data_+ M.sz_ * i + j) << ' ';
+                std::cerr << std::endl;
+            }
         }
         return M;
     }
@@ -140,6 +141,8 @@ namespace matrix
         std::cerr << "I go to to_triangle\n";
         Matrix<double> M = to_triangle();
         std::cerr << "I have finished to_triangle\n";
+        std::cerr << "I have matrix\n";
+        std::cerr << M;
         for (size_t i = 0; i < sz_; i++)
             if ((-Eps < (answer *= *(M.data_ + (sz_ + 1)* i)))
             && ((answer * *(M.data_ + (sz_ + 1)* i)) < Eps))
