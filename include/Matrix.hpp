@@ -31,7 +31,6 @@ namespace matrix
         { delete[] data_; }
 
         //operators
-        operator int() const {return det();}
         Matrix& operator=(const Matrix& M);
         void operator=(Matrix&& M);
 
@@ -42,9 +41,8 @@ namespace matrix
         const T& at(size_t x, size_t y) const
         { return *(data_ + x * sz_ + y); }
         Matrix<T> to_triangle() const;
-        friend std::ostream& operator<<(std::ostream&, Matrix<T>);
+        size_t size() const {return sz_;}
 
-        private:
     };
 
 } // namespace matrix

@@ -1,5 +1,5 @@
 # rm -rf build
-# cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+# cmake -S . -B build
 # cmake --build build
 # for tests:
 # cmake --build ./build --target test

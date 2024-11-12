@@ -10,10 +10,10 @@ namespace matrix
 
     std::ostream& operator<<(std::ostream& os, Matrix<double> M)
     {
-        for (size_t i = 0; i < M.sz_; i++)
+        for (size_t i = 0; i < M.size(); i++)
         {
-            for (size_t j = 0; j < M.sz_; j++)
-                os << *(M.data_+ M.sz_ * i + j) << ' ';
+            for (size_t j = 0; j < M.size(); j++)
+                os << M.at(i, j) << ' ';
             os << std::endl;
         }
         return os;
