@@ -66,7 +66,7 @@ namespace matrix
     }
 
     template <class T>
-    void Matrix<T>::operator=(Matrix<T>&& M)
+    Matrix<T>& Matrix<T>::operator=(Matrix<T>&& M)
     {
         if (this == &M)
             return *this;

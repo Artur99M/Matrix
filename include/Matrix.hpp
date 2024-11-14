@@ -32,7 +32,7 @@ namespace matrix
 
         //operators
         Matrix& operator=(const Matrix& M);
-        void operator=(Matrix&& M);
+        Matrix& operator=(Matrix&& M);
 
         //funcs
         T det() const;
