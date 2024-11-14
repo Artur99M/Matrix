@@ -1,25 +1,25 @@
 # rm -rf build
-# cmake -S . -B build
-# cmake --build build
+# cmake -B build && cmake --build build
 # for tests:
-# cmake --build ./build --target test
-# or
-# cd build && CTest && cd ..
+# cmake --build build --target test
 
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.11)
 
 project (HWMX)
 
 set (EXEC_FILE Matrix.out)
-set (SRCS ${CMAKE_SOURCE_DIR}/src/main.cpp ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
+# set (SRCS src/main.cpp src/Matrix.cpp)
+
+add_library (lMatrix STATIC ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
+target_compile_features (lMatrix PUBLIC cxx_std_11)
 
 add_executable (${EXEC_FILE})
-# add_library (Matrix STATIC ${CMAKE_SOURCE_DIR}/src/Matrix.cpp ${CMAKE_SOURCE_DIR}/include/Matrix.hpp)
-# target_link_libraries (${EXEC_FILE} ${Matrix})
-target_include_directories (${EXEC_FILE} PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_sources (${EXEC_FILE} PRIVATE ${SRCS})
-target_compile_features (${EXEC_FILE} PUBLIC cxx_std_20)
+target_link_libraries (${EXEC_FILE} PUBLIC lMatrix)
+target_include_directories (${EXEC_FILE} PUBLIC "include")
+target_sources (${EXEC_FILE} PRIVATE ${CMAKE_SOURCE_DIR}/src/main.cpp)
+# target_sources (${EXEC_FILE} PRIVATE ${SRCS})
+target_compile_features (${EXEC_FILE} PUBLIC cxx_std_11)
 
 include (Ctest)
 enable_testing()
