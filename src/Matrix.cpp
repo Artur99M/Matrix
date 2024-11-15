@@ -24,12 +24,12 @@ namespace matrix
     Matrix<T>::Matrix(size_t sz) : sz_(sz), data_(new T[sz_ * sz_])
     {}
 
-    template <class T>
-    Matrix<T>::Matrix (size_t sz, T* data) : sz_(sz), data_(new T[sz_ * sz_])
-    {
-        if (data != nullptr)
-            std::copy(data, data + sz_ * sz_, data_);
-    }
+    // template <class T>
+    // Matrix<T>::Matrix (size_t sz, T* data) : sz_(sz), data_(new T[sz_ * sz_])
+    // {
+    //     if (data != nullptr)
+    //         std::copy(data, data + sz_ * sz_, data_);
+    // }
 
     template <class T>
     Matrix<T>::Matrix (size_t sz, T** data) : Matrix<T> (sz, (T*) data)

@@ -20,7 +20,11 @@ namespace matrix
 
         public: // Ctors
         explicit Matrix (size_t sz = 1);
-        Matrix (size_t sz, T* data);
+        Matrix (size_t sz, T* data) : sz_(sz), data_(new T[sz_ * sz_])
+        {
+            if (data != nullptr)
+                std::copy(data, data + sz_ * sz_, data_);
+        }
         Matrix (size_t sz, T** data);
         Matrix (const Matrix& M);
         Matrix (Matrix&& M);
