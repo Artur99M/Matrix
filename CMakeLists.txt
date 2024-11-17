@@ -1,5 +1,5 @@
 # rm -rf build
-# cmake -B build && cmake --build build
+# cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 # for tests:
 # cmake --build build --target test
 
@@ -21,7 +21,7 @@ target_sources (${EXEC_FILE} PRIVATE ${CMAKE_SOURCE_DIR}/src/main.cpp)
 # target_sources (${EXEC_FILE} PRIVATE ${SRCS})
 target_compile_features (${EXEC_FILE} PUBLIC cxx_std_11)
 
-include (Ctest)
+include (CTest)
 enable_testing()
 file(GLOB testfiles "${CMAKE_SOURCE_DIR}/test/*.dat")
 foreach(file ${testfiles})
