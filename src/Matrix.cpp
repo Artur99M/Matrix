@@ -4,6 +4,22 @@
 #include <iostream>
 #include <utility>
 
+#ifdef DEBUG
+auto & debug = std::cerr;
+#else
+class debuging
+{
+    public:
+    template <class T>
+    debuging & operator<< (const T & elem)
+    {
+        return *this;
+    }
+};
+
+debuging debug;
+#endif
+
 
 namespace matrix
 {
@@ -80,6 +96,7 @@ namespace matrix
         Matrix<double> M = *this;
         for (size_t p = 0; p < sz_ - 1; p++)
         {
+            debug << M << '\n';
             double* non_nil_line = nullptr;
             for (size_t l = p; l < sz_; l++)
             {
@@ -91,40 +108,43 @@ namespace matrix
                 }
             }
             if (non_nil_line == nullptr)
-            {
-                //code
-            }
-            else
-            {
-                if (non_nil_line != M.data_ + sz_ * p)
-                {
-                    // double* swap_elem = new double[sz_]{};
-                    // std::copy (non_nil_line, non_nil_line + M.sz_, swap_elem);
-                    // std::copy (M.data_ + sz_ * p, M.data_ + (sz_ + 1) * p, non_nil_line);
-                    // std::copy (swap_elem, swap_elem + sz_, M.data_ + sz_ * p);
-                    // delete[] swap_elem;
-                    // non_nil_line = M.data_ + sz_ * p;
+                continue;
 
-                    for (size_t i = 0; i < sz_; i++)
-                        *(M.data_ + sz_ * p + i) += non_nil_line[i];
-                }
-                double& a_p = non_nil_line[p];
-                // std::cerr << __LINE__ << ": non_nil_line =";
-                // for (size_t i = 0; i < sz_; i++)
-                //     std::cerr << ' ' << non_nil_line[i];
-                // std::cerr << std::endl;
-                for (size_t q = p + 1; q < sz_; q++)
+            if (non_nil_line != M.data_ + sz_ * p)
+            {
+                // double* swap_elem = new double[sz_]{};
+                // std::copy (non_nil_line, non_nil_line + M.sz_, swap_elem);
+                // std::copy (M.data_ + sz_ * p, M.data_ + (sz_ + 1) * p, non_nil_line);
+                // std::copy (swap_elem, swap_elem + sz_, M.data_ + sz_ * p);
+                // delete[] swap_elem;
+                // non_nil_line = M.data_ + sz_ * p;
+
+                for (size_t i = 0; i < sz_; i++)
+                    *(M.data_ + sz_ * p + i) += non_nil_line[i];
+                non_nil_line = M.data_ + sz_ * p;
+            }
+            double& a_p = non_nil_line[p];
+            debug << M;
+            debug << __LINE__ << ": non_nil_line =";
+            for (size_t i = 0; i < sz_; i++)
+                debug << ' ' << non_nil_line[i];
+            debug << '\n';
+            for (size_t q = p + 1; q < sz_; q++)
+            {
+                double b_p = *(M.data_ + sz_ * q + p);
+                debug << __LINE__ << ": b_p = " << b_p << '\n';
+                if ((-Eps > b_p) || (b_p > Eps))
                 {
-                    double b_p = *(M.data_ + sz_ * q + p);
-                    // std::cerr << __LINE__ << ": b_p = " << b_p << std::endl;
-                    if ((-Eps > b_p) || (b_p > Eps))
+                    for (size_t i = p; i < sz_; i++)
                     {
-                        for (size_t i = p; i < sz_; i++)
-                          *(M.data_ + q * sz_ + i) -= (non_nil_line[i] * b_p / a_p);
+                        debug << "(non_nil_line[i] * b_p / a_p) = (" << non_nil_line[i] << " * "
+                        << b_p << " / " << a_p << ") = " << (non_nil_line[i] * b_p / a_p) << '\n';
+                        *(M.data_ + q * sz_ + i) -= (non_nil_line[i] * b_p / a_p);
                     }
                 }
             }
-            // std::cerr << "p = " << p << std::endl;
+
+            debug << M << "----------\n";
         }
         return M;
     }
