@@ -18,5 +18,5 @@ int main()
     matrix::Matrix<long double> M {n, data};
     // std::cerr << "Matrix was made\n";
     delete[] data;
-    std::cout << static_cast<long long>(M.det());
+    std::cout << static_cast<long long>(M.det()) << std::endl;
 }
