@@ -16,6 +16,7 @@ target_compile_features (lMatrix PUBLIC cxx_std_11)
 target_compile_definitions(lMatrix PRIVATE
     $<$<CONFIG:Debug>:DEBUG=1>
 )
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -Wpedantic -fsanitize=address -fsanitize=undefined -g")
 
 add_executable (${EXEC_FILE})
 target_link_libraries (${EXEC_FILE} PUBLIC lMatrix)

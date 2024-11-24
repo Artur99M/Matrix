@@ -6,8 +6,8 @@
 // класс гибче. Реализацию можно подстроить под каждый тип по отдельности.
 
 #pragma once
-#include <vector>
 #include <iostream>
+#include <vector>
 
 namespace matrix
 {
@@ -44,7 +44,7 @@ namespace matrix
         { return *(data_ + x * sz_ + y); }
         const T& at(size_t x, size_t y) const
         { return *(data_ + x * sz_ + y); }
-        Matrix<T> to_triangle() const;
+        const Matrix<T> to_triangle();
         size_t size() const {return sz_;}
 
     };

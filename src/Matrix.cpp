@@ -24,7 +24,7 @@ debuging debug;
 namespace matrix
 {
 
-    std::ostream& operator<<(std::ostream& os, Matrix<double> M)
+    std::ostream& operator<<(std::ostream& os, Matrix<long double> M)
     {
         for (size_t i = 0; i < M.size(); i++)
         {
@@ -91,76 +91,63 @@ namespace matrix
         return *this;
     }
 
-    template<> Matrix<double> Matrix<double>::to_triangle() const
+    template<> const Matrix<long double> Matrix<long double>::to_triangle()
     {
-        Matrix<double> M = *this;
-        for (size_t p = 0; p < sz_ - 1; p++)
+        debug << "In to_triangle\n";
+        for (size_t line = 0; line < sz_; ++line)
         {
-            debug << M << '\n';
-            double* non_nil_line = nullptr;
-            for (size_t l = p; l < sz_; l++)
-            {
-                if ((-Eps > *(M.data_ + l * sz_ + p)) ||
-                (*(M.data_ + l * sz_ + p) > Eps))
+            debug << *this;
+            long double* non_nil_line = nullptr;
+            for (size_t i = line; i < sz_; ++i)
+                if (-Eps > data_[sz_ * i + line] || data_[sz_ * i + line] > Eps)
                 {
-                    non_nil_line = M.data_ + M.sz_ * l;
+                    non_nil_line = data_ + sz_ * i;
                     break;
                 }
-            }
-            if (non_nil_line == nullptr)
-                continue;
+            #ifdef DEBUG
+            debug << "non_nil_line = {";
+            for (size_t i = 0; i < sz_; ++i)
+                debug << data_[i] << ", ";
+            debug << "\b\b}\n";
+            #endif
 
-            if (non_nil_line != M.data_ + sz_ * p)
+            if (non_nil_line != data_ + sz_ * line)
             {
-                // double* swap_elem = new double[sz_]{};
-                // std::copy (non_nil_line, non_nil_line + M.sz_, swap_elem);
-                // std::copy (M.data_ + sz_ * p, M.data_ + (sz_ + 1) * p, non_nil_line);
-                // std::copy (swap_elem, swap_elem + sz_, M.data_ + sz_ * p);
-                // delete[] swap_elem;
-                // non_nil_line = M.data_ + sz_ * p;
-
-                for (size_t i = 0; i < sz_; i++)
-                    *(M.data_ + sz_ * p + i) += non_nil_line[i];
-                non_nil_line = M.data_ + sz_ * p;
-            }
-            double& a_p = non_nil_line[p];
-            debug << M;
-            debug << __LINE__ << ": non_nil_line =";
-            for (size_t i = 0; i < sz_; i++)
-                debug << ' ' << non_nil_line[i];
-            debug << '\n';
-            for (size_t q = p + 1; q < sz_; q++)
-            {
-                double b_p = *(M.data_ + sz_ * q + p);
-                debug << __LINE__ << ": b_p = " << b_p << '\n';
-                if ((-Eps > b_p) || (b_p > Eps))
+                for (size_t i = line; i < sz_; ++i)
                 {
-                    for (size_t i = p; i < sz_; i++)
-                    {
-                        debug << "(non_nil_line[i] * b_p / a_p) = (" << non_nil_line[i] << " * "
-                        << b_p << " / " << a_p << ") = " << (non_nil_line[i] * b_p / a_p) << '\n';
-                        *(M.data_ + q * sz_ + i) -= (non_nil_line[i] * b_p / a_p);
-                    }
+                    data_[sz_ * line + i] += non_nil_line[i];
+                }
+                non_nil_line = data_ + sz_ * line;
+            }
+            double a_p = data_[(sz_ + 1) * line];
+            debug << "a_p = " << a_p << '\n';
+            for (size_t j = line + 1; j < sz_; ++j)
+            {
+                double b_p = data_[sz_ * j + line];
+                debug << "b_p = " << b_p << '\n';
+                if (-Eps > b_p || b_p > Eps)
+                for (size_t i = line; i < sz_; ++i)
+                {
+                    data_[sz_ * j + i] -= (non_nil_line[i] * b_p / a_p);
                 }
             }
-
-            debug << M << "----------\n";
         }
-        return M;
+        return *this;
     }
 
-    template<> double Matrix<double>::det() const
+    template<> long double Matrix<long double>::det() const
     {
         double answer = 1;
         // std::cerr << "I go to to_triangle\n";
-        Matrix<double> M = to_triangle();
+        Matrix<long double> M = *this;
+        M.to_triangle();
         // std::cerr << "I have finished to_triangle\n";
         // std::cerr << "I have matrix\n";
         // std::cerr << M;
-        for (size_t i = 0; i < sz_; i++)
-            if ((-Eps < (answer *= *(M.data_ + (sz_ + 1)* i)))
-            && ((answer * *(M.data_ + (sz_ + 1)* i)) < Eps))
-                break;
+        for (size_t i = 0; i < sz_; ++i)
+        {
+            answer *= (M.data_)[(sz_ + 1) * i];
+        }
         return answer;
 
     }
