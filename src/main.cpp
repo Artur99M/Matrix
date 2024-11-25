@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cassert>
-#include "../include/Matrix.hpp"
+#include "Matrix.hpp"
 
 int main()
 {

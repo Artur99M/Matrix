@@ -13,6 +13,7 @@ set (EXEC_FILE Matrix.out)
 
 add_library (lMatrix STATIC ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
 target_compile_features (lMatrix PUBLIC cxx_std_11)
+target_include_directories (lMatrix PUBLIC include)
 target_compile_definitions(lMatrix PRIVATE
     $<$<CONFIG:Debug>:DEBUG=1>
 )
