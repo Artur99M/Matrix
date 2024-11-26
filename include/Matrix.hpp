@@ -45,7 +45,7 @@ namespace matrix
         const T& at(size_t x, size_t y) const
         { return *(data_ + x * sz_ + y); }
         const Matrix<T> to_triangle();
-        size_t size() const {return sz_;}
+        inline size_t size() const {return sz_;}
 
     };
 

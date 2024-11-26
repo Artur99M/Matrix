@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
+#include <cassert>
 
 #ifdef DEBUG
 auto & debug = std::cerr;
@@ -102,32 +103,36 @@ namespace matrix
                 if (-Eps > data_[sz_ * i + line] || data_[sz_ * i + line] > Eps)
                 {
                     non_nil_line = data_ + sz_ * i;
+                    assert(reinterpret_cast<size_t>(non_nil_line + sz_ - 1) < reinterpret_cast<size_t>(data_ + sz_ * sz_));
                     break;
                 }
-            #ifdef DEBUG
+            if (non_nil_line == nullptr) continue;
             debug << "non_nil_line = {";
             for (size_t i = 0; i < sz_; ++i)
                 debug << data_[i] << ", ";
             debug << "\b\b}\n";
-            #endif
 
             if (non_nil_line != data_ + sz_ * line)
             {
                 for (size_t i = line; i < sz_; ++i)
                 {
                     data_[sz_ * line + i] += non_nil_line[i];
+                    assert (sz_ * line + i < sz_ * sz_);
                 }
                 non_nil_line = data_ + sz_ * line;
             }
             double a_p = data_[(sz_ + 1) * line];
+            assert ((sz_ + 1) * line < sz_ * sz_);
             debug << "a_p = " << a_p << '\n';
             for (size_t j = line + 1; j < sz_; ++j)
             {
                 double b_p = data_[sz_ * j + line];
+                assert (sz_ * j + line < sz_ * sz_);
                 debug << "b_p = " << b_p << '\n';
                 if (-Eps > b_p || b_p > Eps)
                 for (size_t i = line; i < sz_; ++i)
                 {
+                    assert(sz_ * j + i < sz_ * sz_);
                     data_[sz_ * j + i] -= (non_nil_line[i] * b_p / a_p);
                 }
             }
@@ -147,6 +152,7 @@ namespace matrix
         for (size_t i = 0; i < sz_; ++i)
         {
             answer *= (M.data_)[(sz_ + 1) * i];
+            assert ((sz_ + 1) * i < sz_ * sz_);
         }
         return answer;
 
