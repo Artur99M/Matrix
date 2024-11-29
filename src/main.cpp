@@ -18,5 +18,11 @@ int main()
     matrix::Matrix<long double> M {n, data};
     // std::cerr << "Matrix was made\n";
     delete[] data;
-    std::cout << static_cast<long long>(M.det()) << std::endl;
+    std::cout.precision(12);
+    double answer_d = M.det();
+    int answer_i = static_cast<int>(answer_d);
+    if (answer_d - answer_i < 0.5)
+        std::cout << answer_i << std::endl;
+    else
+        std::cout << (answer_i + 1) << std::endl;
 }

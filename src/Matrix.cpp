@@ -149,11 +149,14 @@ namespace matrix
         // std::cerr << "I have finished to_triangle\n";
         // std::cerr << "I have matrix\n";
         // std::cerr << M;
+        debug << "\n\n\n";
         for (size_t i = 0; i < sz_; ++i)
         {
+            debug << (M.data_)[(sz_ + 1) * i] << ' ';
             answer *= (M.data_)[(sz_ + 1) * i];
             assert ((sz_ + 1) * i < sz_ * sz_);
         }
+        debug << '\n';
         return answer;
 
     }
