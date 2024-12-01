@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cassert>
+#include <cmath>
 #include "Matrix.hpp"
+// #include "debug.hpp"
 
 int main()
 {
@@ -18,11 +20,16 @@ int main()
     matrix::Matrix<long double> M {n, data};
     // std::cerr << "Matrix was made\n";
     delete[] data;
-    std::cout.precision(12);
-    double answer_d = M.det();
+    //std::cerr.precision(12);
+    long double answer_d = M.det();
     int answer_i = static_cast<int>(answer_d);
-    if (answer_d - answer_i < 0.5)
+    //std::cerr << "answer_i = " << answer_i << ", answer_d = " << answer_d << std::endl;
+    if (std::abs(answer_d) - std::abs(answer_i) < 0.5)
         std::cout << answer_i << std::endl;
     else
-        std::cout << (answer_i + 1) << std::endl;
+        if (answer_d > 0)
+            std::cout << (answer_i + 1) << std::endl;
+        else 
+            std::cout << (answer_i - 1) << std::endl;
+    //std::cout << answer_d << std::endl;
 }

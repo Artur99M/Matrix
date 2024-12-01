@@ -4,22 +4,7 @@
 #include <iostream>
 #include <utility>
 #include <cassert>
-
-#ifdef DEBUG
-auto & debug = std::cerr;
-#else
-class debuging
-{
-    public:
-    template <class T>
-    debuging & operator<< (const T & elem)
-    {
-        return *this;
-    }
-};
-
-debuging debug;
-#endif
+#include "debug.hpp"
 
 
 namespace matrix
